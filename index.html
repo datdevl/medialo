@@ -1,847 +1,881 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MediConnect - Tư Vấn Y Tế Online</title>
-    <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Medialo - Your Health, Our Priority</title>
+  <link rel="icon" href="./assets/lg.png" type="image/png">
+  <link rel="shortcut icon" href="./assets/lg.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+</style>
+  <style>
+    /* ==== CSS CƠ BẢN ==== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-            color: #333;
-            line-height: 1.6;
-            min-height: 100vh;
-        }
+    body {
+      font-family: 'Roboto', sans-serif;
+      line-height: 1.6;
+      background-color: #f5f7fa;
+      color: #333;
+    }
 
-        .container {
-            background: #ffffff;
-            padding: 2.5rem;
-            border-radius: 20px;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            max-width: 500px;
-            width: 90%;
-            transition: all 0.3s ease;
-            margin: 20px auto;
-        }
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
 
-        .container.hidden {
-            display: none;
-        }
+    img {
+      max-width: 100%;
+      display: block;
+    }
 
-        /* Video Call Container */
-        .video-call-container {
-            display: none;
-            width: 100%;
-            height: 100vh;
-            background: #1a1a1a;
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 1000;
-        }
+    /* ==== HEADER ==== */
+    /* ==== HEADER STYLE GIỐNG MEDLATEC ==== */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 30px;
+  background-color: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
 
-        .video-call-container.active {
-            display: flex;
-            flex-direction: column;
-        }
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 
-        .video-wrapper {
-            display: flex;
-            flex: 1;
-            gap: 10px;
-            padding: 10px;
-        }
+.logo img {
+  height: 40px;
+}
 
-        .video-box {
-            flex: 1;
-            position: relative;
-            background: #000;
-            border-radius: 10px;
-            overflow: hidden;
-            min-height: 0;
-        }
+.logo .brand {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #0072ff;
+  letter-spacing: 0.5px;
+}
 
-        .video-box video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+.search-bar {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-        .video-label {
-            position: absolute;
-            bottom: 10px;
-            left: 10px;
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 500;
-        }
+.search-bar input {
+  width: 60%;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px 0 0 4px;
+  background: #f8f8f8;
+  font-size: 0.95rem;
+}
 
-        .video-controls {
-            background: #2a2a2a;
-            padding: 15px;
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            align-items: center;
-        }
+.search-bar button {
+  background-color: #0072ff;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+}
 
-        .control-btn {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            transition: all 0.3s;
-        }
+.search-bar button:hover {
+  background-color: #005ad1;
+}
 
-        .control-btn:hover {
-            transform: scale(1.1);
-        }
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
 
-        .btn-mute {
-            background: #4a5568;
-            color: white;
-        }
+.hotline, .support {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #333;
+}
 
-        .btn-mute.active {
-            background: #e53e3e;
-        }
+.hotline small, .support small {
+  color: gray;
+  font-size: 0.8rem;
+}
 
-        .btn-video {
-            background: #4a5568;
-            color: white;
-        }
+.hotline a, .support a {
+  font-weight: 600;
+  margin: 0;
+  color: #0072ff;
+  font-size: 0.95rem;
+  display: block;
+}
 
-        .btn-video.active {
-            background: #e53e3e;
-        }
+.lang img {
+  height: 22px;
+  border-radius: 50%;
+}
 
-        .btn-end {
-            background: #e53e3e;
-            color: white;
-        }
+.auth {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
 
-        .room-info {
-            position: absolute;
-            top: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 10px 25px;
-            border-radius: 25px;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            z-index: 10;
-        }
+.auth .link {
+  color: #0072ff;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: 0.3s;
+}
 
-        .room-code {
-            font-weight: bold;
-            font-size: 16px;
-            letter-spacing: 1px;
-        }
+.auth .link:hover {
+  text-decoration: underline;
+}
 
-        .peer-id-display {
-            position: absolute;
-            top: 50px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 8px 15px;
-            border-radius: 15px;
-            font-size: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            z-index: 10;
-        }
+.header-line {
+  border: none;
+  border-top: 1px solid #e5e5e5;
+}
 
-        .peer-id-display code {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 2px 8px;
-            border-radius: 5px;
-            font-family: monospace;
-        }
+/* ==== RESPONSIVE HEADER ==== */
+@media (max-width: 900px) {
+  .header {
+    padding: 10px 15px;
+  }
+  
+  .search-bar {
+    margin: 0 10px;
+  }
+  
+  .search-bar input {
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  .header-right {
+    display: none;
+  }
+  
+  .logo .brand {
+    font-size: 1.2rem;
+  }
+}
 
-        .copy-btn {
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 12px;
-            transition: background 0.3s;
-        }
+@media (max-width: 600px) {
+  .header {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .search-bar {
+    order: 3;
+    width: 100%;
+    margin: 10px 0 0 0;
+  }
+  
+  .search-bar input {
+    max-width: 100%;
+  }
+}
 
-        .copy-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
 
-        .waiting-message {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
-            text-align: center;
-            font-size: 18px;
-        }
+    header img {
+      height: 70px;
+    }
 
-        @media (max-width: 768px) {
-            .video-wrapper {
-                flex-direction: column;
-            }
-            
-            .video-box {
-                min-height: 200px;
-            }
-        }
+    nav ul {
+      display: flex;
+      gap: 1.8rem;
+      align-items: center;
+    }
 
-        h1 {
-            color: #0d9488; /* Xanh y tế */
-            margin-bottom: 1rem;
-            font-size: 2rem;
-            font-weight: 600;
-        }
+    nav a {
+      color: #fff;
+      font-weight: 500;
+      font-family: 'Inter', sans-serif;
+      font-size: 1.05rem;
+      transition: color 0.3s ease;
+    }
 
-        p {
-            color: #6b7280;
-            margin-bottom: 2rem;
-            font-size: 1.1rem;
-        }
+    nav a:hover {
+      color: #ffeb3b;
+    }
+    /* ==== Nút Đăng Nhập / Đăng Ký ==== */
+    .btn-login, .btn-signup {
+      padding: 8px 18px;
+      border-radius: 25px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
 
-        .form-group {
-            margin-bottom: 1.5rem;
-            text-align: left;
-        }
+    .btn-login {
+      border: 2px solid #ffffff;
+      color: #ffffff;
+    }
 
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            color: #374151;
-            font-size: 0.95rem;
-        }
+    .btn-login:hover {
+      background-color: #ffffff;
+      color: #0072ff;
+    }
 
-        input, select, textarea {
-            width: 100%;
-            padding: 0.75rem;
-            border: 2px solid #e5e7eb;
-            border-radius: 10px;
-            font-size: 1rem;
-            transition: border-color 0.3s;
-        }
+    .btn-signup {
+      background-color: #ffffff;
+      color: #0072ff;
+      border: 2px solid #ffffff;
+      margin-left: 6px;
+    }
 
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: #0d9488;
-        }
+    .btn-signup:hover {
+      background-color: #ffeb3b;
+      color: #0d0d38;
+      border-color: #ffeb3b;
+    }
 
-        textarea {
-            resize: vertical;
-            min-height: 80px;
-        }
 
-        .btn {
-            display: block;
-            width: 100%;
-            padding: 1rem;
-            margin: 1rem 0;
-            border: none;
-            border-radius: 10px;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: background 0.3s, transform 0.2s;
-            text-decoration: none;
-            color: white;
-            font-weight: 500;
-        }
+    /* Nút menu mobile */
+    .menu-toggle {
+      display: none;
+      background: none;
+      border: 2px solid #fff;
+      color: #fff;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
 
-        .btn-primary {
-            background: linear-gradient(135deg, #0d9488, #14b8a6);
-        }
+    /* MOBILE MENU */
+    @media (max-width: 768px) {
+      nav ul {
+        display: none;
+        flex-direction: column;
+        background-color: rgba(0, 114, 255, 0.95);
+        width: 100%;
+        position: absolute;
+        top: 80px;
+        left: 0;
+        padding: 1.2rem 0;
+        text-align: center;
+      }
+      .btn-login, .btn-signup {
+        display: inline-block;
+        margin: 8px 0;
+      }
+      nav ul.active {
+        display: flex;
+      }
 
-        .btn-primary:hover {
-            background: linear-gradient(135deg, #0d9488, #0f766e);
-            transform: translateY(-2px);
-        }
+      .menu-toggle {
+        display: block;
+      }
 
-        .btn-success {
-            background: linear-gradient(135deg, #10b981, #059669);
-        }
+      nav a {
+        display: block;
+        padding: 10px 0;
+        font-size: 1.1rem;
+      }
 
-        .btn-success:hover {
-            background: linear-gradient(135deg, #059669, #047857);
-            transform: translateY(-2px);
-        }
+      header img {
+        height: 60px;
+      }
+    }
+    /* ==== NAV BAR ==== */
+    .nav-bar {
+      background-color: #00358f;
+      color: white;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      position: sticky;
+      top: 68px;
+      z-index: 999;
+      padding: 0 30px;
+    }
 
-        .loading {
-            display: none;
-            text-align: center;
-            padding: 2rem;
-        }
+    .nav-bar ul {
+      list-style: none;
+      display: flex;
+      gap: 2rem;
+      padding: 14px 0;
+      margin: 0;
+    }
 
-        .loading.show {
-            display: block;
-        }
+    .nav-bar a {
+      color: white;
+      font-weight: 500;
+      font-size: 1rem;
+      transition: color 0.3s ease;
+    }
 
-        .spinner {
-            border: 4px solid #f3f4f6;
-            border-top: 4px solid #0d9488;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 1rem;
-        }
+    .nav-bar a:hover {
+      color: #ffeb3b;
+    }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+    /* Mobile Menu */
+    .nav-bar .menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 1.5rem;
+      position: absolute;
+      right: 20px;
+      cursor: pointer;
+      padding: 8px;
+    }
 
-        .success-message {
-            display: none;
-            text-align: center;
-            padding: 2rem;
-        }
+    @media (max-width: 768px) {
+      .nav-bar {
+        padding: 10px 20px;
+        top: 68px;
+      }
 
-        .success-message.show {
-            display: block;
-        }
+      .nav-bar ul {
+        display: none;
+        flex-direction: column;
+        background-color: #0072ff;
+        width: 100%;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        padding: 1rem 0;
+        text-align: center;
+        gap: 0;
+      }
 
-        .success-message h2 {
-            color: #059669;
-            margin-bottom: 1rem;
-        }
+      .nav-bar ul.active {
+        display: flex;
+      }
 
-        .success-message p {
-            color: #6b7280;
-            margin-bottom: 1rem;
-        }
+      .nav-bar .menu-toggle {
+        display: block;
+      }
 
-        .meeting-code {
-            background: #f0fdf4;
-            border: 2px dashed #10b981;
-            border-radius: 10px;
-            padding: 1rem;
-            margin: 1rem 0;
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: #047857;
-        }
+      .nav-bar a {
+        display: block;
+        padding: 12px 0;
+        font-size: 1.1rem;
+      }
+    }
 
-        @media (max-width: 480px) {
-            .container {
-                padding: 2rem;
-            }
-            h1 {
-                font-size: 1.7rem;
-            }
-        }
-    </style>
+    /* ==== HERO SECTION ==== */
+    .hero {
+      background: linear-gradient(135deg, #00c6ff, #0072ff);
+      color: white;
+      text-align: center;
+      padding: 80px 20px;
+      margin-top: 0;
+    }
+
+    .hero h1 {
+      font-size: 2.8rem;
+      margin-bottom: 1rem;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+    }
+
+    .hero button {
+      background-color: #fff;
+      color: #0072ff;
+      border: none;
+      padding: 12px 28px;
+      font-size: 1rem;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .hero button:hover {
+      background-color: #1559ed;
+      color: #fff;
+    }
+
+    /* ==== SERVICES ==== */
+    section {
+      padding: 60px 20px;
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 40px;
+      color: #0d0d38;
+    }
+
+    .services {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 2rem;
+    }
+
+    .service-card {
+      background: #fff;
+      padding: 1.8rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+      text-align: center;
+    }
+
+    .service-card:hover {
+      transform: translateY(-8px);
+    }
+
+    .service-card img {
+      width: 80px;
+      margin-bottom: 1rem;
+    }
+
+    .service-card h3 {
+      color: #0072ff;
+      margin-bottom: 0.8rem;
+    }
+
+    /* ==== ABOUT SECTION ==== */
+    .about {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .about img {
+      flex: 1 1 400px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .about-content {
+      flex: 1 1 400px;
+    }
+
+    .about-content h2 {
+      color: #0d0d38;
+      margin-bottom: 1rem;
+    }
+
+    .about-content p {
+      margin-bottom: 1rem;
+      text-align: justify;
+    }
+
+    /* ==== CONTACT SECTION ==== */
+    .contact {
+      background-color: #eef3f9;
+      padding: 60px 20px;
+    }
+
+    .contact form {
+      max-width: 600px;
+      margin: auto;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .contact input,
+    .contact textarea {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-family: 'Roboto', sans-serif;
+      transition: border-color 0.3s;
+    }
+    
+    .contact input:focus,
+    .contact textarea:focus {
+      outline: none;
+      border-color: #0072ff;
+    }
+
+    .contact button {
+      background-color: #0072ff;
+      color: #fff;
+      border: none;
+      padding: 12px 24px;
+      font-size: 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .contact button:hover {
+      background-color: #0d0d38;
+    }
+
+	/* ==== TEAM SECTION ==== */
+	#team {
+	  padding: 60px 20px;
+	  background-color: #f9fafc;
+	}
+	
+	.container {
+	  max-width: 1100px;
+	  margin: 0 auto;
+	}
+	.team-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+	gap: 2rem;
+	}
+	.team-member {
+	background-color: #fff;
+	padding: 20px;
+	text-align: center;
+	border-radius: 10px;
+	box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+	}
+	.team-member img {
+	width: 120px;
+	height: 120px;
+	object-fit: cover;
+	border-radius: 50%;
+	margin-bottom: 15px;
+	}
+	.team-member h3 {
+	margin: 10px 0 5px;
+	font-size: 1.2rem;
+	color: #0072ff;
+	}
+	.team-member p {
+	font-size: 1rem;
+	color: #555;
+	}
+
+	/* ==== 3 EASY STEPS SECTION ==== */
+	.steps {
+	  background-color: #f5faff;
+	  text-align: center;
+	  padding: 60px 20px;
+	}
+
+	.steps h2 {
+	  font-size: 1.8rem;
+	  color: #0b1033;
+	  margin-bottom: 40px;
+	  font-weight: 400;
+	}
+
+	.steps h2 strong {
+	  font-weight: 700;
+	}
+
+	.steps-row {
+	  display: flex;
+	  justify-content: center;
+	  align-items: center;
+	  gap: 60px;
+	  flex-wrap: wrap;
+	  max-width: 1100px;
+	  margin: 0 auto;
+	}
+
+	.step-item {
+	  display: flex;
+	  align-items: center;
+	  gap: 10px;
+	  font-size: 1rem;
+	  color: #0b1033;
+	  font-weight: 600;
+	  transition: transform 0.3s ease;
+	}
+
+	.step-item:hover {
+	  transform: translateY(-3px);
+	}
+
+	.step-item .icon {
+	  font-size: 1.5rem;
+	}
+
+	/* Responsive Steps */
+	@media (max-width: 768px) {
+	  .steps {
+		padding: 40px 15px;
+	  }
+	  
+	  .steps h2 {
+		font-size: 1.5rem;
+		margin-bottom: 30px;
+	  }
+	  
+	  .steps-row {
+		flex-direction: column;
+		gap: 25px;
+	  }
+	  
+	  .step-item {
+		font-size: 0.95rem;
+	  }
+	}
+
+
+    /* ==== FOOTER ==== */
+    footer {
+      background-color: #00358f;
+      color: #fff;
+      text-align: center;
+      padding: 1.2rem;
+      font-size: 0.9rem;
+    }
+
+    footer a {
+      color: #67c1ff;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* ==== RESPONSIVE ==== */
+    @media (max-width: 900px) {
+      .hero {
+        padding: 60px 20px;
+      }
+      
+      .hero h1 {
+        font-size: 2.2rem;
+      }
+      
+      .hero p {
+        font-size: 1rem;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .hero {
+        padding: 50px 15px;
+      }
+      
+      .hero h1 {
+        font-size: 1.8rem;
+      }
+      
+      .hero p {
+        font-size: 0.95rem;
+      }
+    }
+  </style>
 </head>
+
 <body>
-    <!-- Form Container -->
-    <div class="container" id="formContainer">
-        <h1>Tư Vấn Y Tế Online</h1>
-        <p>Điền thông tin để bắt đầu cuộc gọi video với bác sĩ.</p>
+  <!-- HEADER -->
+<header class="header">
+  <div class="logo">
+    <a href="./index.html"><img src="./assets/lg.png" alt="Medialo Logo"></a>
+    <span class="brand">MEDIALO</span>
+  </div>
 
-        <form id="patientForm">
-            <div class="form-group">
-                <label for="fullName">Họ và tên:</label>
-                <input type="text" id="fullName" required placeholder="Nhập họ và tên đầy đủ">
-            </div>
+  <div class="search-bar">
+    <input type="text" placeholder="Tìm kiếm..." />
+    <button><i class="fa fa-search"></i></button>
+  </div>
 
-            <div class="form-group">
-                <label for="birthDate">Ngày tháng năm sinh:</label>
-                <input type="date" id="birthDate" required>
-            </div>
+  <div class="header-right">
+    <div class="hotline">
+      <i class="fa fa-phone"></i>
+      <div>
+        <small>Đường dây nóng</small>
+        <a href="tel:1345335303" style="color: #0072ff;">1345335303</a>
+      </div>
+    </div>
 
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" required placeholder="Nhập email của bạn">
-            </div>
+    <div class="support">
+      <i class="fa fa-comment-dots"></i>
+      <div>
+        <small>Liên hệ</small>
+        <a href="https://www.facebook.com/datdevl" style="color: #0072ff;" target="_blank">Hỗ trợ khách hàng</a>
+      </div>
+    </div>
 
-            <div class="form-group">
-                <label for="specialty">Chuyên khoa:</label>
-                <select id="specialty" required>
-                    <option value="">Chọn chuyên khoa</option>
-                    <option value="noi">Nội khoa</option>
-                    <option value="ngoai">Ngoại khoa</option>
-                    <option value="nha">Răng hàm mặt</option>
-                    <option value="mat">Mắt</option>
-                    <option value="tam-than">Tâm thần</option>
-                </select>
-            </div>
+    <div class="lang">
+      <img src="https://sohanews.sohacdn.com/zoom/700_438/2019/4/8/anh-2-1-15547143952721696163894-crop-15547146808041346851054.jpg" alt="Vietnam Flag">
+    </div>
 
-            <div class="form-group">
-                <label for="condition">Tình trạng bệnh hiện tại:</label>
-                <textarea id="condition" required placeholder="Mô tả chi tiết triệu chứng hoặc tình trạng sức khỏe hiện tại..."></textarea>
-            </div>
+    <div class="auth">
+      <a href="./signup.html" class="link">Đăng ký</a>
+      <span>|</span>
+      <a href="./login.html" class="link">Đăng nhập</a>
+    </div>
+  </div>
+</header>
+<hr class="header-line">
 
-            <div class="form-group">
-                <label for="roomId">Mã phòng (để trống nếu tạo phòng mới):</label>
-                <input type="text" id="roomId" placeholder="Nhập mã phòng để tham gia">
-                <small style="color: #6b7280; font-size: 0.85rem; display: block; margin-top: 5px;">
-                    💡 <strong>Hướng dẫn:</strong> Nếu bạn là bác sĩ, để trống để tạo phòng mới. Nếu bạn là bệnh nhân, nhập mã phòng mà bác sĩ đã cung cấp.
-                </small>
-            </div>
-            <div class="form-group">
-                <label for="peerIdInput">Hoặc nhập Peer ID trực tiếp (nếu có):</label>
-                <input type="text" id="peerIdInput" placeholder="Nhập Peer ID của bác sĩ (tùy chọn)">
-                <small style="color: #6b7280; font-size: 0.85rem; display: block; margin-top: 5px;">
-                    💡 Nếu mã phòng không hoạt động, bạn có thể nhập Peer ID trực tiếp. Peer ID sẽ được hiển thị sau khi bác sĩ tạo phòng.
-                </small>
-            </div>
+<!-- NAVIGATION -->
+<nav class="nav-bar">
+  <ul class="nav-list" id="nav-list">
+    <li><a href="#home">Trang chủ</a></li>
+    <li><a href="#services">Dịch vụ</a></li>
+    <li><a href="#about">Giới thiệu</a></li>
+    <li><a href="#team">Đội ngũ</a></li>
+    <li><a href="#steps">CSSK</a></li>
+    <li><a href="#contact">Liên hệ</a></li>
+  </ul>
+  <button class="menu-toggle" id="menu-btn"><i class="fa fa-bars"></i></button>
+</nav>
 
-            <button type="submit" class="btn btn-primary">Bắt Đầu Cuộc Gọi</button>
-        </form>
 
-        <p style="font-size: 0.8rem; color: #9ca3af; margin-top: 1rem;">
-            Thông tin của bạn sẽ được bảo mật theo quy định y tế.
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <h1> MEDIALO 24/7 Online </h1>
+    <p>Dịch vụ Y tế Việt Nam trực tuyến 24/7</p>
+    <button>Tìm hiểu ngay</button>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <h2 class="section-title">Dịch Vụ Y Tế Của Chúng Tôi</h2>
+    <div class="services">
+      <div class="service-card">
+        <img src="https://cdn-icons-png.flaticon.com/512/3209/3209265.png" alt="Video Consultation">
+        <h3>Tư vấn video</h3>
+        <p>Thảo luận với các bác sĩ có kinh nghiệm của chúng tôi thông qua các buổi video trực tuyến an toàn.</p>
+      </div>
+
+      <div class="service-card">
+        <img src="https://cdn-icons-png.flaticon.com/512/4150/4150703.png" alt="Medical Certificates">
+        <h3>Giấy Chứng Nhận Y Tế</h3>
+        <p>Yêu cầu các tài liệu chính thức cho sức khỏe hoặc đi lại một cách dễ dàng.</p>
+      </div>
+
+      <div class="service-card">
+        <img src="https://cdn-icons-png.flaticon.com/512/2966/2966327.png" alt="Mental Health">
+        <h3>Hỗ Trợ Sức Khỏe Tâm Thần</h3>
+        <p>Truy cập liệu pháp trực tuyến và tư vấn sức khỏe tâm thần.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="about">
+      <img src="https://dronline.uk/wp-content/uploads/2023/07/dr-online-telehealth-uk.jpg" alt="About Dr.Online">
+      <div class="about-content">
+        <h2>Giới thiệu về MEDIALO</h2>
+        <p>
+          MEDIALO là một nền tảng telehealth có trụ sở tại Việt Nam, cung cấp quyền truy cập nhanh chóng đến các bác sĩ đa khoa (GP) và chuyên gia y tế có giấy phép.
+          Chúng tôi tập trung vào sự tiện lợi, bảo mật và chăm sóc tận tâm.
         </p>
-        <a href="home.html" style="display: inline-block; margin-top: 1rem; color: #0d9488; text-decoration: none;">← Quay lại trang chủ</a>
+        <p>
+          Sứ mệnh của chúng tôi là làm cho dịch vụ chăm sóc sức khỏe trở nên dễ tiếp cận với mọi người thông qua công nghệ hiện đại và tư vấn trực tuyến.
+        </p>
+      </div>
     </div>
+  </section>
 
-    <!-- Video Call Container -->
-    <div class="video-call-container" id="videoCallContainer">
-        <div class="room-info" id="roomInfo">
-            <span>Mã phòng:</span>
-            <span class="room-code" id="roomCode"></span>
-            <button class="copy-btn" id="copyRoomBtn" onclick="copyRoomCode()" title="Sao chép mã phòng">📋</button>
-        </div>
-        <div class="peer-id-display" id="peerIdDisplay" style="display: none;">
-            <span>Peer ID:</span>
-            <code id="peerIdCode"></code>
-            <button class="copy-btn" id="copyPeerBtn" onclick="copyPeerId()" title="Sao chép Peer ID" style="font-size: 10px; padding: 3px 6px;">📋</button>
-        </div>
-        <div class="video-wrapper">
-            <div class="video-box">
-                <video id="localVideo" autoplay playsinline muted></video>
-                <div class="video-label" id="localLabel">Bạn</div>
-                <div class="waiting-message" id="localWaiting" style="display: none;">Đang kết nối...</div>
-            </div>
-            <div class="video-box">
-                <video id="remoteVideo" autoplay playsinline></video>
-                <div class="video-label" id="remoteLabel">Đang chờ người tham gia...</div>
-                <div class="waiting-message" id="remoteWaiting">Đang chờ người tham gia...</div>
-            </div>
-        </div>
-        <div class="video-controls">
-            <button class="control-btn btn-mute" id="muteBtn" title="Tắt/Bật tiếng">
-                🎤
-            </button>
-            <button class="control-btn btn-video" id="videoBtn" title="Tắt/Bật video">
-                📹
-            </button>
-            <button class="control-btn btn-end" id="endCallBtn" title="Kết thúc cuộc gọi">
-                📞
-            </button>
-    </div>
-    </div>
+  <!-- TEAM SECTION -->
+	<section id="team">
+	<div class="container">
+		<h2 class="section-title">Gặp Gỡ Đội Ngũ Của Chúng Tôi</h2>
+		<div class="team-grid">
+		<div class="team-member">
+			<img src="./assets/doc1.png" alt="Dr Adam Winiger">
+			<h3>Dr Adam Winiger</h3>
+			<p>Giám Đốc Y Tế</p>
+		</div>
+		<div class="team-member">
+			<img src="./assets/doc2.png" alt="Dr Maria Gonzalez">
+			<h3>Dr Maria Gonzalez</h3>
+			<p>Bác Sĩ Đa Khoa (GP)</p>
+		</div>
+		<div class="team-member">
+			<img src="./assets/doc3.png" alt="Dr Nickolas Smith">
+			<h3>Dr Nickolas Smith</h3>
+			<p>Bác Sĩ Đa Khoa (GP)</p>
+		</div>
+		<!-- Thêm nhiều thành viên khác nếu cần -->
+		</div>
+	</div>
+	</section>
 
-    <script>
-        let peer = null;
-        let localStream = null;
-        let currentCall = null;
-        let isMuted = false;
-        let isVideoOff = false;
-        let roomId = '';
-        let isHost = false;
+	<!-- 3 EASY STEPS -->
+	<section id="steps" class="steps">
+	<h2>Chăm sóc sức khỏe <strong>Ba Bước Dễ Dàng</strong></h2>
+	<div class="steps-row">
+		<div class="step-item">
+		<i class="icon">📅</i>
+		<span>Đặt Lịch Hẹn Và Thanh Toán <i>(nếu có)</i></span>
+		</div>
 
-        // Generate room ID
-        function generateRoomId() {
-            return Math.random().toString(36).substring(2, 9);
-        }
+		<div class="step-item">
+		<i class="icon">🎥</i>
+		<span>Cuộc Gọi Video</span>
+		</div>
 
-        // Initialize PeerJS with retry logic
-        function initPeer(room, isHostUser) {
-            // Generate random ID to avoid conflicts
-            const peerId = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-            
-            peer = new Peer(peerId, {
-                host: '0.peerjs.com',
-                port: 443,
-                path: '/',
-                secure: true
-            });
+		<div class="step-item">
+		<i class="icon">🩺</i>
+		<span>Tham Gia Cuộc Tư Vấn Của Bạn</span>
+		</div>
+	</div>
+	</section>
 
-            peer.on('open', (id) => {
-                console.log('Peer connected:', id);
-                // Display peer ID
-                document.getElementById('peerIdCode').textContent = id;
-                document.getElementById('peerIdDisplay').style.display = 'flex';
-                
-                if (isHostUser) {
-                    // Save host peer ID to localStorage
-                    localStorage.setItem('room_' + room, id);
-                    // Host waits for connections
-                    waitForCall();
-                } else {
-                    // Client connects to host
-                    connectToHost(room);
-                }
-            });
 
-            peer.on('error', (err) => {
-                console.error('Peer error:', err);
-                if (err.type === 'unavailable-id' || err.type === 'id-taken') {
-                    // Retry with new ID
-                    console.log('ID taken, retrying...');
-                    setTimeout(() => {
-                        if (peer) peer.destroy();
-                        initPeer(room, isHostUser);
-                    }, 1000);
-                } else if (err.type !== 'peer-unavailable') {
-                    console.error('Peer error:', err);
-                    // Don't show alert for peer-unavailable as it's normal when host not ready
-                }
-            });
-        }
+  <!-- CONTACT -->
+  <section id="contact" class="contact">
+    <h2 class="section-title">Liên Hệ Với Chúng Tôi</h2>
+    <form>
+      <input type="text" placeholder="Họ và Tên" required />
+      <input type="tel" placeholder="Số Điện Thoại" required />
+      <input type="email" placeholder="Địa Chỉ Email" required />
+      <textarea rows="5" placeholder="Tin Nhắn Của Bạn"></textarea>
+      <button type="submit">Gửi Tin Nhắn</button>
+    </form>
+  </section>
 
-        // Get user media
-        async function getLocalStream() {
-            try {
-                localStream = await navigator.mediaDevices.getUserMedia({
-                    video: true,
-                    audio: true
-                });
-                
-                const localVideo = document.getElementById('localVideo');
-                localVideo.srcObject = localStream;
-                document.getElementById('localWaiting').style.display = 'none';
-                
-                return localStream;
-            } catch (err) {
-                console.error('Error accessing media devices:', err);
-                alert('Không thể truy cập camera/microphone. Vui lòng kiểm tra quyền truy cập.');
-                return null;
-            }
-        }
+  <!-- FOOTER -->
+  <footer>
+    <p>&copy; 2025 MEDIALO — Designed for Learning HTML & CSS.</p>
+    <p>Follow us on 
+      <a href="https://www.facebook.com/datdevl">Facebook</a> | 
+      <a href="https://www.instagram.com/datdevl">Instagram</a> | 
+      <a href="https://www.linkedin.com/in/datdevl">LinkedIn</a>
+    </p>
+  </footer>
 
-        // Host waits for incoming calls
-        function waitForCall() {
-            peer.on('call', (call) => {
-                call.answer(localStream);
-                currentCall = call;
-                
-                call.on('stream', (remoteStream) => {
-                    const remoteVideo = document.getElementById('remoteVideo');
-                    remoteVideo.srcObject = remoteStream;
-                    document.getElementById('remoteWaiting').style.display = 'none';
-                    document.getElementById('remoteLabel').textContent = isHost ? 'Bệnh nhân' : 'Bác sĩ';
-                });
-
-                call.on('close', () => {
-                    document.getElementById('remoteVideo').srcObject = null;
-                    document.getElementById('remoteWaiting').style.display = 'block';
-                    document.getElementById('remoteLabel').textContent = 'Đã ngắt kết nối';
-                });
-            });
-        }
-
-        // Client connects to host
-        function connectToHost(room) {
-            // Check if user provided peer ID directly
-            const directPeerId = document.getElementById('peerIdInput').value.trim();
-            let hostId = directPeerId;
-            
-            // If no direct peer ID, try to get from localStorage
-            if (!hostId) {
-                hostId = localStorage.getItem('room_' + room);
-            }
-            
-            if (!hostId) {
-                // Host not found, wait and retry
-                console.log('Host not found, waiting...');
-                document.getElementById('remoteWaiting').textContent = 'Đang chờ host tham gia...\nNếu host đã tạo phòng, hãy nhập Peer ID của host vào form.';
-                
-                // Poll for host in localStorage
-                const checkHost = setInterval(() => {
-                    const foundHostId = localStorage.getItem('room_' + room);
-                    if (foundHostId) {
-                        clearInterval(checkHost);
-                        tryCallHost(foundHostId);
-                    }
-                }, 1000);
-                
-                // Stop polling after 30 seconds
-                setTimeout(() => {
-                    clearInterval(checkHost);
-                    if (!currentCall) {
-                        document.getElementById('remoteWaiting').textContent = 'Không tìm thấy host. Vui lòng:\n1. Kiểm tra mã phòng\n2. Hoặc nhập Peer ID của host trực tiếp vào form';
-                    }
-                }, 30000);
-                
-                return;
-            }
-            
-            // Try to call host
-            setTimeout(() => {
-                tryCallHost(hostId);
-            }, 1000);
-        }
-
-        // Try to call host
-        function tryCallHost(hostId) {
-            try {
-                const call = peer.call(hostId, localStream);
-                
-                if (call) {
-                    currentCall = call;
-                    
-                    call.on('stream', (remoteStream) => {
-                        const remoteVideo = document.getElementById('remoteVideo');
-                        remoteVideo.srcObject = remoteStream;
-                        document.getElementById('remoteWaiting').style.display = 'none';
-                        document.getElementById('remoteLabel').textContent = isHost ? 'Bệnh nhân' : 'Bác sĩ';
-                    });
-
-                    call.on('close', () => {
-                        document.getElementById('remoteVideo').srcObject = null;
-                        document.getElementById('remoteWaiting').style.display = 'block';
-                        document.getElementById('remoteLabel').textContent = 'Đã ngắt kết nối';
-                    });
-
-                    call.on('error', (err) => {
-                        console.error('Call error:', err);
-                        if (err.type === 'peer-unavailable') {
-                            document.getElementById('remoteWaiting').textContent = 'Host chưa sẵn sàng. Đang thử lại...';
-                            // Retry after 2 seconds
-                            setTimeout(() => {
-                                const hostId = localStorage.getItem('room_' + roomId);
-                                if (hostId) {
-                                    tryCallHost(hostId);
-                                }
-                            }, 2000);
-                        }
-                    });
-                }
-            } catch (err) {
-                console.error('Error calling host:', err);
-                document.getElementById('remoteWaiting').textContent = 'Lỗi kết nối. Đang thử lại...';
-                // Retry after 2 seconds
-                setTimeout(() => {
-                    const hostId = localStorage.getItem('room_' + roomId);
-                    if (hostId) {
-                        tryCallHost(hostId);
-                    }
-                }, 2000);
-            }
-        }
-
-        // Start video call
-        async function startVideoCall(room) {
-            roomId = room;
-            document.getElementById('roomCode').textContent = roomId;
-            document.getElementById('formContainer').classList.add('hidden');
-            document.getElementById('videoCallContainer').classList.add('active');
-
-            const stream = await getLocalStream();
-            if (!stream) {
-                document.getElementById('formContainer').classList.remove('hidden');
-                document.getElementById('videoCallContainer').classList.remove('active');
-                return;
-            }
-
-            // Determine if host or client
-            const urlParams = new URLSearchParams(window.location.search);
-            const inputRoomId = document.getElementById('roomId').value.trim();
-            const urlRoomId = urlParams.get('room');
-            const joinRoom = inputRoomId || urlRoomId;
-            
-            if (joinRoom && joinRoom !== room) {
-                // Joining existing room (client)
-                isHost = false;
-                roomId = joinRoom;
-                document.getElementById('roomCode').textContent = roomId;
-                initPeer(roomId, false);
-            } else {
-                // Creating new room (host)
-                isHost = true;
-                roomId = room;
-                document.getElementById('roomCode').textContent = roomId;
-                initPeer(roomId, true);
-            }
-        }
-
-        // Control buttons
-        document.getElementById('muteBtn').addEventListener('click', () => {
-            if (localStream) {
-                isMuted = !isMuted;
-                localStream.getAudioTracks().forEach(track => {
-                    track.enabled = !isMuted;
-                });
-                document.getElementById('muteBtn').classList.toggle('active', isMuted);
-            }
+  <!-- MENU TOGGLE JS -->
+  <script>
+    const menuBtn = document.getElementById('menu-btn');
+    const navList = document.querySelector('.nav-list');
+    
+    if (menuBtn && navList) {
+      menuBtn.addEventListener('click', () => {
+        navList.classList.toggle('active');
+      });
+      
+      // Đóng menu khi click vào link
+      const navLinks = navList.querySelectorAll('a');
+      navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          navList.classList.remove('active');
         });
-
-        document.getElementById('videoBtn').addEventListener('click', () => {
-            if (localStream) {
-                isVideoOff = !isVideoOff;
-                localStream.getVideoTracks().forEach(track => {
-                    track.enabled = !isVideoOff;
-                });
-                document.getElementById('videoBtn').classList.toggle('active', isVideoOff);
-            }
-        });
-
-        document.getElementById('endCallBtn').addEventListener('click', () => {
-            endCall();
-        });
-
-        // End call
-        function endCall() {
-            if (currentCall) {
-                currentCall.close();
-            }
-            
-            if (localStream) {
-                localStream.getTracks().forEach(track => track.stop());
-            }
-            
-            if (peer) {
-                peer.destroy();
-            }
-
-            // Clean up room data if host
-            if (isHost && roomId) {
-                localStorage.removeItem('room_' + roomId);
-            }
-
-            document.getElementById('videoCallContainer').classList.remove('active');
-            document.getElementById('formContainer').classList.remove('hidden');
-            
-            // Reset
-            document.getElementById('localVideo').srcObject = null;
-            document.getElementById('remoteVideo').srcObject = null;
-            document.getElementById('remoteWaiting').style.display = 'block';
-            document.getElementById('localWaiting').style.display = 'none';
-            
-            // Reset variables
-            isHost = false;
-            roomId = '';
-        }
-
-        // Form submit
-        document.getElementById('patientForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-
-            const email = document.getElementById('email').value;
-            if (!email.includes('@')) {
-                alert('Vui lòng nhập email hợp lệ!');
-                return;
-            }
-
-            // Lưu dữ liệu bệnh nhân
-            const patientData = {
-                name: document.getElementById('fullName').value,
-                birthDate: document.getElementById('birthDate').value,
-                email: email,
-                specialty: document.getElementById('specialty').value,
-                condition: document.getElementById('condition').value,
-                submittedAt: new Date().toLocaleString('vi-VN')
-            };
-            
-            let allPatients = JSON.parse(localStorage.getItem('patientRecords') || '[]');
-            allPatients.push(patientData);
-            localStorage.setItem('patientRecords', JSON.stringify(allPatients));
-
-            // Get or create room ID
-            const inputRoomId = document.getElementById('roomId').value.trim();
-            const newRoomId = inputRoomId || generateRoomId();
-            
-            // Update URL with room ID if creating new room
-            if (!inputRoomId) {
-                window.history.pushState({}, '', `?room=${newRoomId}`);
-            }
-
-            // Start video call
-            await startVideoCall(newRoomId);
-        });
-
-        // Check if joining existing room from URL
-        window.addEventListener('DOMContentLoaded', () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            const roomParam = urlParams.get('room');
-            if (roomParam) {
-                document.getElementById('roomId').value = roomParam;
-            }
-        });
-
-        // Copy room code
-        function copyRoomCode() {
-            const roomCode = document.getElementById('roomCode').textContent;
-            const url = window.location.origin + window.location.pathname + '?room=' + roomCode;
-            
-            navigator.clipboard.writeText(url).then(() => {
-                const btn = document.getElementById('copyRoomBtn');
-                const originalText = btn.textContent;
-                btn.textContent = '✓';
-                btn.style.background = 'rgba(16, 185, 129, 0.5)';
-                setTimeout(() => {
-                    btn.textContent = originalText;
-                    btn.style.background = '';
-                }, 2000);
-            }).catch(() => {
-                // Fallback for older browsers
-                const textarea = document.createElement('textarea');
-                textarea.value = url;
-                document.body.appendChild(textarea);
-                textarea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textarea);
-                alert('Đã sao chép link: ' + url);
-            });
-        }
-
-        // Copy peer ID
-        function copyPeerId() {
-            const peerId = document.getElementById('peerIdCode').textContent;
-            
-            navigator.clipboard.writeText(peerId).then(() => {
-                const btn = document.getElementById('copyPeerBtn');
-                const originalText = btn.textContent;
-                btn.textContent = '✓';
-                btn.style.background = 'rgba(16, 185, 129, 0.5)';
-                setTimeout(() => {
-                    btn.textContent = originalText;
-                    btn.style.background = '';
-                }, 2000);
-            }).catch(() => {
-                // Fallback
-                const textarea = document.createElement('textarea');
-                textarea.value = peerId;
-                document.body.appendChild(textarea);
-                textarea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textarea);
-                alert('Đã sao chép Peer ID: ' + peerId);
-            });
-        }
-
-        // Set max date for birth date
-        document.getElementById('birthDate').max = new Date().toISOString().split('T')[0];
-    </script>
+      });
+    }
+  </script>
 </body>
 </html>

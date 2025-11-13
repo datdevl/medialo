@@ -1,0 +1,1434 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Doctor4U - Kết nối bệnh nhân & bác sĩ</title>
+<link rel="icon" href="./assets/lg.png" type="image/png">
+<link rel="shortcut icon" href="./assets/lg.png" type="image/png">
+<style>
+/* CSS sẽ được thêm ở PHẦN 2 */
+/* ========== RESET + FONT ========== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
+}
+body {
+  background: #f6fafd;
+  color: #333;
+  line-height: 1.6;
+}
+a {
+  text-decoration: none;
+  color: #007bff;
+}
+ul {
+  list-style: none;
+}
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: auto;
+}
+.text-center {
+  text-align: center;
+}
+.btn {
+  display: inline-block;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.btn-primary {
+  background: #007bff;
+  color: #fff;
+  border: none;
+}
+.btn-outline {
+  border: 1px solid #007bff;
+  color: #007bff;
+  background: transparent;
+}
+.btn-primary:hover,
+.btn-outline:hover {
+  opacity: 0.8;
+}
+.section {
+  padding: 60px 0;
+}
+.section-title {
+  color: #007bff;
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 30px;
+  text-align: center;
+  position: relative;
+  padding-bottom: 15px;
+}
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #007bff, #00c6ff);
+  border-radius: 2px;
+}
+
+/* ========== HEADER ========== */
+header {
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 100;
+}
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 5%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+.logo-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: transform 0.3s ease;
+}
+.logo-box:hover {
+  transform: scale(1.05);
+}
+.logo {
+  height: 50px;
+  width: auto;
+  object-fit: contain;
+}
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+.nav-links a {
+  font-weight: 500;
+  color: #333;
+  transition: color 0.3s ease;
+  position: relative;
+  padding: 5px 0;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #007bff;
+  transition: width 0.3s ease;
+}
+.nav-links a:hover {
+  color: #007bff;
+}
+.nav-links a:hover::after {
+  width: 100%;
+}
+.hotline {
+  font-weight: bold;
+  color: #007bff;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 15px;
+  background: #f0f7ff;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+}
+.hotline:hover {
+  background: #007bff;
+  color: #fff;
+  transform: translateY(-2px);
+}
+.menu-toggle {
+  display: none;
+  cursor: pointer;
+  font-size: 28px;
+  color: #007bff;
+  padding: 8px;
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+.menu-toggle:hover {
+  background: #f0f7ff;
+}
+@media (max-width: 768px) {
+  .navbar {
+    padding: 10px 20px;
+  }
+  .logo {
+    height: 40px;
+  }
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    gap: 15px;
+    background: #fff;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    padding: 20px 0;
+    border-top: 1px solid #eee;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  .nav-links.active {
+    display: flex;
+  }
+  .nav-links a {
+    padding: 10px 0;
+  }
+  .nav-links a::after {
+    display: none;
+  }
+  .hotline {
+    margin: 10px auto 0;
+    width: fit-content;
+  }
+  .menu-toggle {
+    display: block;
+  }
+}
+
+/* ========== MODAL ĐĂNG KÝ ========== */
+#openModal {
+  display: none;
+}
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+#openModal:checked ~ .modal {
+  display: flex;
+}
+.modal-content {
+  background: #fff;
+  width: 90%;
+  max-width: 500px;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+.modal h3 {
+  color: #007bff;
+  margin-bottom: 10px;
+}
+.modal label {
+  display: block;
+  margin-top: 10px;
+}
+.modal input,
+.modal textarea,
+.modal select {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 22px;
+  color: #666;
+  cursor: pointer;
+}
+.modal-close:hover {
+  color: #007bff;
+}
+
+/* ========== TRANG CHỦ ========== */
+#home.section {
+  padding-top: 120px;
+}
+.search-box {
+  text-align: center;
+  margin-top: 20px;
+  padding: 40px 20px;
+  background: linear-gradient(135deg, #f0f7ff 0%, #e0f2fe 100%);
+  border-radius: 12px;
+  margin-bottom: 40px;
+}
+.search-box input {
+  width: 60%;
+  max-width: 500px;
+  padding: 14px 20px;
+  border: 2px solid #ddd;
+  border-radius: 30px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  outline: none;
+}
+.search-box input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+.chat-box {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 25px;
+  margin-top: 40px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.chat-box:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+.chat-box h4 {
+  color: #007bff;
+  margin-bottom: 15px;
+  font-size: 1.2rem;
+}
+.chat-box textarea {
+  width: 100%;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 12px;
+  margin-top: 10px;
+  resize: none;
+  font-family: inherit;
+  transition: border-color 0.3s ease;
+}
+.chat-box textarea:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+.chat-box button {
+  margin-top: 12px;
+  padding: 12px 30px;
+  border-radius: 25px;
+  font-weight: 600;
+}
+.rating-section {
+  margin-top: 40px;
+  padding: 30px;
+  background: linear-gradient(135deg, #fff 0%, #f8f9ff 100%);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 2px solid #f0f7ff;
+  transition: all 0.3s ease;
+}
+.rating-section:hover {
+  box-shadow: 0 6px 16px rgba(0, 123, 255, 0.15);
+  transform: translateY(-2px);
+}
+.rating-section h4 {
+  color: #007bff;
+  margin-bottom: 10px;
+  font-size: 1.2rem;
+}
+.rating-section p {
+  color: #666;
+  margin-bottom: 15px;
+  line-height: 1.6;
+}
+
+/* ========== HỒ SƠ BÁC SĨ ========== */
+.doctor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+  margin-top: 30px;
+}
+.doctor-card {
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 25px;
+  text-align: center;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+.doctor-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 20px rgba(0, 123, 255, 0.2);
+  border-color: #007bff;
+}
+.doctor-card img {
+  border-radius: 50%;
+  width: 130px;
+  height: 130px;
+  object-fit: cover;
+  border: 4px solid #f0f7ff;
+  transition: border-color 0.3s ease;
+}
+.doctor-card:hover img {
+  border-color: #007bff;
+}
+.doctor-card h4 {
+  margin: 18px 0 8px;
+  color: #333;
+  font-size: 1.1rem;
+}
+.doctor-card p {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 15px;
+}
+.doctor-card .btn {
+  margin-top: 10px;
+  padding: 10px 25px;
+  border-radius: 25px;
+  font-weight: 600;
+}
+
+/* ========== POPUP BÁC SĨ ========== */
+.modal-doc {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 200;
+}
+.modal-doc:target {
+  display: flex;
+}
+.modal-doc .content {
+  background: #fff;
+  width: 90%;
+  max-width: 700px;
+  padding: 20px;
+  border-radius: 8px;
+  position: relative;
+  animation: fadeIn 0.4s ease;
+}
+.modal-doc .close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  color: #555;
+  font-size: 22px;
+}
+.modal-doc .close:hover {
+  color: #007bff;
+}
+.popup-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.popup-header img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.stars {
+  color: #fbc02d;
+  font-size: 18px;
+}
+.stars span {
+  color: #555;
+  font-size: 14px;
+  margin-left: 8px;
+}
+.popup-body h4 {
+  margin-top: 20px;
+  color: #007bff;
+}
+.appoint-form input,
+.appoint-form textarea {
+  width: 100%;
+  margin-top: 10px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.appoint-form button {
+  margin-top: 10px;
+}
+.reviews p {
+  background: #f8f9fb;
+  border-radius: 6px;
+  padding: 10px;
+  margin-top: 10px;
+  border-left: 4px solid #007bff;
+}
+
+/* ========== TƯ VẤN ========== */
+.consult-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 25px;
+  margin-top: 30px;
+}
+.consult-item {
+  background: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+.consult-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0, 123, 255, 0.15);
+  border-color: #007bff;
+}
+.consult-item h4 {
+  color: #007bff;
+  margin-bottom: 12px;
+  font-size: 1.15rem;
+}
+.consult-item p {
+  color: #666;
+  margin-bottom: 15px;
+  line-height: 1.6;
+}
+.consult-item input[type="file"] {
+  margin-top: 10px;
+  padding: 8px;
+  border: 2px dashed #ddd;
+  border-radius: 8px;
+  width: 100%;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+}
+.consult-item input[type="file"]:hover {
+  border-color: #007bff;
+}
+.consult-item .btn {
+  margin-top: 12px;
+  padding: 12px 30px;
+  border-radius: 25px;
+  font-weight: 600;
+}
+.history {
+  background: #fff;
+  border-radius: 12px;
+  padding: 25px;
+  margin-top: 30px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+.history h4 {
+  color: #007bff;
+  margin-bottom: 15px;
+  font-size: 1.15rem;
+}
+.history ul {
+  margin-top: 15px;
+  max-height: 300px;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+.history ul::-webkit-scrollbar {
+  width: 6px;
+}
+.history ul::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+.history ul::-webkit-scrollbar-thumb {
+  background: #007bff;
+  border-radius: 10px;
+}
+.history li {
+  margin-bottom: 12px;
+  font-size: 14px;
+  padding: 10px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border-left: 3px solid #007bff;
+  transition: background 0.3s ease;
+}
+.history li:hover {
+  background: #f0f7ff;
+}
+.history textarea {
+  width: 100%;
+  margin-top: 15px;
+  padding: 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-family: inherit;
+  resize: vertical;
+  transition: border-color 0.3s ease;
+}
+.history textarea:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+.history .btn {
+  margin-top: 12px;
+  padding: 12px 30px;
+  border-radius: 25px;
+  font-weight: 600;
+}
+
+/* ========== FOOTER ========== */
+footer {
+  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+  color: #fff;
+  text-align: center;
+  padding: 25px 0;
+  margin-top: 60px;
+  font-size: 0.95rem;
+}
+footer p {
+  margin: 5px 0;
+}
+
+/* ========== ANIMATION ========== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="navbar">
+    <a href="./index.html" class="logo-box">
+      <img src="./assets/lg.png" class="logo" alt="MEDIALO">
+      <b><span class="brand">MEDIALO</span></b>
+    </a>
+    <div class="menu-toggle" onclick="document.querySelector('.nav-links').classList.toggle('active')">☰</div>
+    <nav class="nav-links">
+      <a href="#home">Rate ☆</a>
+      <a href="#doctors">Bác sĩ</a>
+      <a href="#consult">Tư vấn</a>
+      <label for="openModal" class="btn btn-outline">Đăng ký khám</label>
+      <span class="hotline">📞 1345 335 303</span>
+    </nav>
+  </div>
+</header>
+
+<!-- MODAL ĐĂNG KÝ -->
+<input type="checkbox" id="openModal">
+<div class="modal" id="registerModal">
+  <div class="modal-content">
+    <label for="openModal" class="modal-close">&times;</label>
+    <h3>Đăng ký khám & tư vấn</h3>
+    <form id="registerForm">
+      <label>Họ và tên*</label>
+      <input type="text" id="regName" placeholder="Nhập họ tên..." required>
+      <label>Số điện thoại*</label>
+      <input type="tel" id="regPhone" placeholder="0123456789" required>
+      <label>Chuyên khoa</label>
+      <select id="regSpecialty">
+        <option value="">Chọn chuyên khoa</option>
+        <option>Tim mạch</option>
+        <option>Da liễu</option>
+        <option>Thần kinh</option>
+        <option>Nội tiết</option>
+        <option>Nhi khoa</option>
+      </select>
+      <label>Lý do khám*</label>
+      <textarea id="regReason" rows="3" placeholder="Mô tả triệu chứng..." required></textarea>
+      <button type="submit" class="btn btn-primary">Gửi đăng ký</button>
+    </form>
+  </div>
+</div>
+
+<!-- TRANG CHỦ -->
+<section id="home" class="section">
+  <div class="container">
+    <h2 class="section-title">🏠 Tìm kiếm & Kết nối với bác sĩ</h2>
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="🔍 Nhập chuyên khoa cần tìm...">
+      <button class="btn btn-primary" id="searchBtn" style="margin-left: 10px; padding: 14px 30px; border-radius: 30px; font-weight: 600;">Tìm kiếm</button>
+    </div>
+    <div id="searchResults" style="margin-top: 30px; display: none;"></div>
+    <div class="text-center rating-section">
+      <h4>⭐ Đánh giá bác sĩ hàng đầu</h4>
+      <p>Chia sẻ trải nghiệm của bạn để giúp người khác lựa chọn tốt hơn.</p>
+      <button class="btn btn-primary" id="writeReviewBtn" style="margin-top: 10px;">Viết đánh giá</button>
+    </div>
+    <div class="chat-box">
+      <h4>💬 Chat hỗ trợ trực tuyến</h4>
+      <div id="chatMessages" style="max-height: 250px; overflow-y: auto; margin-bottom: 15px; padding: 15px; background: #f8f9fa; border-radius: 8px; border: 2px solid #e9ecef;">
+        <p style="color: #666; font-size: 14px; margin: 0;">Xin chào! Tôi là trợ lý MEDIALO 👩‍⚕️ — bạn cần hỗ trợ gì hôm nay?</p>
+      </div>
+      <textarea id="chatInput" rows="3" placeholder="Nhập tin nhắn..."></textarea>
+      <button class="btn btn-primary" id="sendChatBtn">Gửi</button>
+    </div>
+  </div>
+</section>
+
+<!-- HỒ SƠ BÁC SĨ -->
+<section id="doctors" class="section" style="background:#eef6fd;">
+  <div class="container">
+    <h2 class="section-title">👨‍⚕️ Hồ sơ bác sĩ</h2>
+    <div class="doctor-grid">
+      <!-- Bác sĩ 1 -->
+      <div class="doctor-card">
+        <img src="https://doctor4u.vn/wp-content/uploads/2021/06/BSKhuong-250x251.jpg" alt="">
+        <h4>ThS.BSCKI Nguyễn Văn Khương</h4>
+        <p>Bác sĩ gia đình – ĐH Y Hà Nội</p>
+        <a href="#bs1" class="btn btn-primary">Chi tiết</a>
+      </div>
+      <!-- Bác sĩ 2 -->
+      <div class="doctor-card">
+        <img src="https://doctor4u.vn/wp-content/uploads/2021/06/BSHung-250x250.jpg" alt="">
+        <h4>TS. BS Nguyễn Minh Hùng</h4>
+        <p>Tim mạch – BV Bạch Mai</p>
+        <a href="#bs2" class="btn btn-primary">Chi tiết</a>
+      </div>
+      <!-- Bác sĩ 3 -->
+      <div class="doctor-card">
+        <img src="https://doctor4u.vn/wp-content/uploads/2021/06/BS-Thu-Huong-tiet-nieu.jpg" alt="">
+        <h4>TS.BS Nguyễn Thị Thu Hương</h4>
+        <p>Thận – Tiết niệu – BV ĐH Y Hà Nội</p>
+        <a href="#bs3" class="btn btn-primary">Chi tiết</a>
+      </div>
+      <!-- Bác sĩ 4 -->
+      <div class="doctor-card">
+        <img src="https://doctor4u.vn/wp-content/uploads/2021/06/BSCKI-Nguyen-Thi-Lan-Huong-270x250.jpg" alt="">
+        <h4>BS. Lê Thị Anh</h4>
+        <p>Da liễu – BV Da Liễu TW</p>
+        <a href="#bs4" class="btn btn-primary">Chi tiết</a>
+      </div>
+      <!-- Bác sĩ 5 -->
+      <div class="doctor-card">
+        <img src="https://doctor4u.vn/wp-content/uploads/2021/06/BS-Dung-2048x1771.jpg" alt="">
+        <h4>BSCKII Nguyễn Văn Bình</h4>
+        <p>Nội tiết – BV Trung ương</p>
+        <a href="#bs5" class="btn btn-primary">Chi tiết</a>
+      </div>
+      <!-- Bác sĩ 6 -->
+      <div class="doctor-card">
+        <img src="https://doctor4u.vn/wp-content/uploads/2021/06/BSDuc-250x250.jpg" alt="">
+        <h4>BS. Đức</h4>
+        <p>Chuyên khoa Nội</p>
+        <a href="#bs6" class="btn btn-primary">Chi tiết</a>
+      </div>
+      <!-- Bác sĩ 7 -->
+      <div class="doctor-card">
+        <img src="https://doctor4u.vn/wp-content/uploads/2021/06/BSNam-250x247.png" alt="">
+        <h4>BS. Nam</h4>
+        <p>Chuyên khoa Ngoại</p>
+        <a href="#bs7" class="btn btn-primary">Chi tiết</a>
+      </div>
+      <!-- Bác sĩ 8 -->
+      <div class="doctor-card">
+        <img src="https://doctor4u.vn/wp-content/uploads/2021/06/BSChung-250x250.jpg" alt="">
+        <h4>BS. Chung</h4>
+        <p>Chuyên khoa Nhi</p>
+        <a href="#bs8" class="btn btn-primary">Chi tiết</a>
+      </div>
+      <!-- Bác sĩ 9 -->
+      <div class="doctor-card">
+        <img src="https://doctor4u.vn/wp-content/uploads/2021/06/BSDao-250x250.jpg" alt="">
+        <h4>BS. Đào</h4>
+        <p>Chuyên khoa Sản phụ khoa</p>
+        <a href="#bs9" class="btn btn-primary">Chi tiết</a>
+      </div>
+      <!-- Bác sĩ 10 -->
+      <div class="doctor-card">
+        <img src="https://doctor4u.vn/wp-content/uploads/2021/06/BS-Trang-2-270x250.jpg" alt="">
+        <h4>BS. Trang</h4>
+        <p>Chuyên khoa Mắt</p>
+        <a href="#bs10" class="btn btn-primary">Chi tiết</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- POPUP CHI TIẾT 5 BÁC SĨ -->
+<!-- Mẫu popup chứa thông tin + hẹn khám + đánh giá -->
+<div id="bs1" class="modal-doc">
+  <div class="content">
+    <a href="#" class="close">&times;</a>
+    <div class="popup-header">
+      <img src="https://doctor4u.vn/wp-content/uploads/2021/06/BSKhuong-250x251.jpg">
+      <div>
+        <h3>ThS.BSCKI Nguyễn Văn Khương</h3>
+        <p>Bác sĩ gia đình – ĐH Y Hà Nội</p>
+        <div class="stars">★★★★★ <span>4.9/5 (120 đánh giá)</span></div>
+      </div>
+    </div>
+    <div class="popup-body">
+      <h4>🗓 Hẹn khám</h4>
+      <form class="appoint-form" onsubmit="handleAppointment(event, 'bs1')">
+        <input type="text" id="apptName1" placeholder="Họ và tên*" required>
+        <input type="date" id="apptDate1" required>
+        <input type="time" id="apptTime1" required>
+        <textarea id="apptReason1" rows="2" placeholder="Lý do khám..." required></textarea>
+        <button type="submit" class="btn btn-primary">Đặt lịch</button>
+      </form>
+      <h4>💬 Đánh giá bệnh nhân</h4>
+      <div class="reviews">
+        <p><b>Nguyễn Thảo:</b> Bác sĩ tư vấn nhiệt tình, dễ hiểu. ⭐⭐⭐⭐⭐</p>
+        <p><b>Trần Dũng:</b> Khám nhanh, đúng giờ, rất chuyên nghiệp. ⭐⭐⭐⭐☆</p>
+        <p><b>Minh Châu:</b> Cảm ơn bác sĩ, tôi đã khỏe hơn nhiều! ⭐⭐⭐⭐⭐</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bác sĩ 2 -->
+<div id="bs2" class="modal-doc">
+  <div class="content">
+    <a href="#" class="close">&times;</a>
+    <div class="popup-header">
+      <img src="https://doctor4u.vn/wp-content/uploads/2021/06/BSHung-250x250.jpg">
+      <div>
+        <h3>TS. BS Nguyễn Minh Hùng</h3>
+        <p>Tim mạch – BV Bạch Mai</p>
+        <div class="stars">★★★★☆ <span>4.7/5 (98 đánh giá)</span></div>
+      </div>
+    </div>
+    <div class="popup-body">
+      <h4>🗓 Hẹn khám</h4>
+      <form class="appoint-form" onsubmit="handleAppointment(event, 'bs2')">
+        <input type="text" id="apptName2" placeholder="Họ và tên*" required>
+        <input type="date" id="apptDate2" required>
+        <input type="time" id="apptTime2" required>
+        <textarea id="apptReason2" rows="2" placeholder="Lý do khám..." required></textarea>
+        <button type="submit" class="btn btn-primary">Đặt lịch</button>
+      </form>
+      <h4>💬 Đánh giá bệnh nhân</h4>
+      <div class="reviews">
+        <p><b>Hoàng Lâm:</b> Bác sĩ có chuyên môn cao, rất tận tâm. ⭐⭐⭐⭐⭐</p>
+        <p><b>Mai Anh:</b> Giải thích rõ ràng, dễ hiểu. ⭐⭐⭐⭐☆</p>
+        <p><b>Tuấn Phạm:</b> Cảm ơn bác sĩ, tim tôi ổn định hơn. ⭐⭐⭐⭐⭐</p>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Bác sĩ 3 -->
+<div id="bs3" class="modal-doc">
+  <div class="content">
+    <a href="#" class="close">&times;</a>
+    <div class="popup-header">
+      <img src="https://doctor4u.vn/wp-content/uploads/2021/06/BS-Thu-Huong-tiet-nieu.jpg">
+      <div>
+        <h3>TS.BS Nguyễn Thị Thu Hương</h3>
+        <p>Thận – Tiết niệu – BV ĐH Y Hà Nội</p>
+        <div class="stars">★★★★★ <span>5.0/5 (152 đánh giá)</span></div>
+      </div>
+    </div>
+    <div class="popup-body">
+      <h4>🗓 Hẹn khám</h4>
+      <form class="appoint-form" onsubmit="handleAppointment(event, 'bs3')">
+        <input type="text" id="apptName3" placeholder="Họ và tên*" required>
+        <input type="date" id="apptDate3" required>
+        <input type="time" id="apptTime3" required>
+        <textarea id="apptReason3" rows="2" placeholder="Lý do khám..." required></textarea>
+        <button type="submit" class="btn btn-primary">Đặt lịch</button>
+      </form>
+      <h4>💬 Đánh giá bệnh nhân</h4>
+      <div class="reviews">
+        <p><b>Lan Anh:</b> Bác sĩ nhẹ nhàng, tận tâm, rất chu đáo. ⭐⭐⭐⭐⭐</p>
+        <p><b>Thanh Tâm:</b> Hướng dẫn rõ ràng, dễ thực hiện. ⭐⭐⭐⭐☆</p>
+        <p><b>Minh Khang:</b> Dịch vụ tốt, đáng tin cậy. ⭐⭐⭐⭐⭐</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bác sĩ 4 -->
+<div id="bs4" class="modal-doc">
+  <div class="content">
+    <a href="#" class="close">&times;</a>
+    <div class="popup-header">
+      <img src="https://doctor4u.vn/wp-content/uploads/2021/06/BSCKI-Nguyen-Thi-Lan-Huong-270x250.jpg">
+      <div>
+        <h3>BS. Lê Thị Anh</h3>
+        <p>Da liễu – BV Da Liễu TW</p>
+        <div class="stars">★★★★☆ <span>4.6/5 (87 đánh giá)</span></div>
+      </div>
+    </div>
+    <div class="popup-body">
+      <h4>🗓 Hẹn khám</h4>
+      <form class="appoint-form" onsubmit="handleAppointment(event, 'bs4')">
+        <input type="text" id="apptName4" placeholder="Họ và tên*" required>
+        <input type="date" id="apptDate4" required>
+        <input type="time" id="apptTime4" required>
+        <textarea id="apptReason4" rows="2" placeholder="Lý do khám..." required></textarea>
+        <button type="submit" class="btn btn-primary">Đặt lịch</button>
+      </form>
+      <h4>💬 Đánh giá bệnh nhân</h4>
+      <div class="reviews">
+        <p><b>Ngọc Hà:</b> Bác sĩ khám kỹ, da tôi cải thiện nhiều. ⭐⭐⭐⭐⭐</p>
+        <p><b>Thu Thảo:</b> Cẩn thận, nhiệt tình, dễ thương. ⭐⭐⭐⭐☆</p>
+        <p><b>Bảo Vy:</b> Tư vấn đúng tình trạng, cảm ơn bác sĩ! ⭐⭐⭐⭐⭐</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bác sĩ 5 -->
+<div id="bs5" class="modal-doc">
+  <div class="content">
+    <a href="#" class="close">&times;</a>
+    <div class="popup-header">
+      <img src="https://doctor4u.vn/wp-content/uploads/2021/06/BS-Dung-2048x1771.jpg"">
+      <div>
+        <h3>BSCKII Nguyễn Văn Bình</h3>
+        <p>Nội tiết – BV Trung ương</p>
+        <div class="stars">★★★★★ <span>5.0/5 (165 đánh giá)</span></div>
+      </div>
+    </div>
+    <div class="popup-body">
+      <h4>🗓 Hẹn khám</h4>
+      <form class="appoint-form" onsubmit="handleAppointment(event, 'bs5')">
+        <input type="text" id="apptName5" placeholder="Họ và tên*" required>
+        <input type="date" id="apptDate5" required>
+        <input type="time" id="apptTime5" required>
+        <textarea id="apptReason5" rows="2" placeholder="Lý do khám..." required></textarea>
+        <button type="submit" class="btn btn-primary">Đặt lịch</button>
+      </form>
+      <h4>💬 Đánh giá bệnh nhân</h4>
+      <div class="reviews">
+        <p><b>Hữu Đạt:</b> Bác sĩ giỏi, tư vấn kỹ lưỡng. ⭐⭐⭐⭐⭐</p>
+        <p><b>Minh Trí:</b> Dịch vụ chuyên nghiệp, thân thiện. ⭐⭐⭐⭐⭐</p>
+        <p><b>Vân Nhi:</b> Tôi rất hài lòng với cách điều trị. ⭐⭐⭐⭐⭐</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bác sĩ 6 -->
+<div id="bs6" class="modal-doc">
+  <div class="content">
+    <a href="#" class="close">&times;</a>
+    <div class="popup-header">
+      <img src="https://doctor4u.vn/wp-content/uploads/2021/06/BSDuc-250x250.jpg">
+      <div>
+        <h3>BS. Đức</h3>
+        <p>Chuyên khoa Nội</p>
+        <div class="stars">★★★★☆ <span>4.7/5 (95 đánh giá)</span></div>
+      </div>
+    </div>
+    <div class="popup-body">
+      <h4>🗓 Hẹn khám</h4>
+      <form class="appoint-form" onsubmit="handleAppointment(event, 'bs6')">
+        <input type="text" id="apptName6" placeholder="Họ và tên*" required>
+        <input type="date" id="apptDate6" required>
+        <input type="time" id="apptTime6" required>
+        <textarea id="apptReason6" rows="2" placeholder="Lý do khám..." required></textarea>
+        <button type="submit" class="btn btn-primary">Đặt lịch</button>
+      </form>
+      <h4>💬 Đánh giá bệnh nhân</h4>
+      <div class="reviews">
+        <p><b>Văn Hùng:</b> Bác sĩ tư vấn rất chi tiết, dễ hiểu. ⭐⭐⭐⭐⭐</p>
+        <p><b>Mai Linh:</b> Khám bệnh cẩn thận, tận tâm. ⭐⭐⭐⭐☆</p>
+        <p><b>Quốc Anh:</b> Rất hài lòng với dịch vụ. ⭐⭐⭐⭐⭐</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bác sĩ 7 -->
+<div id="bs7" class="modal-doc">
+  <div class="content">
+    <a href="#" class="close">&times;</a>
+    <div class="popup-header">
+      <img src="https://doctor4u.vn/wp-content/uploads/2021/06/BSNam-250x247.png">
+      <div>
+        <h3>BS. Nam</h3>
+        <p>Chuyên khoa Ngoại</p>
+        <div class="stars">★★★★★ <span>4.8/5 (110 đánh giá)</span></div>
+      </div>
+    </div>
+    <div class="popup-body">
+      <h4>🗓 Hẹn khám</h4>
+      <form class="appoint-form" onsubmit="handleAppointment(event, 'bs7')">
+        <input type="text" id="apptName7" placeholder="Họ và tên*" required>
+        <input type="date" id="apptDate7" required>
+        <input type="time" id="apptTime7" required>
+        <textarea id="apptReason7" rows="2" placeholder="Lý do khám..." required></textarea>
+        <button type="submit" class="btn btn-primary">Đặt lịch</button>
+      </form>
+      <h4>💬 Đánh giá bệnh nhân</h4>
+      <div class="reviews">
+        <p><b>Thành Đạt:</b> Bác sĩ có tay nghề cao, phẫu thuật thành công. ⭐⭐⭐⭐⭐</p>
+        <p><b>Hồng Nhung:</b> Tư vấn rõ ràng, giải thích kỹ lưỡng. ⭐⭐⭐⭐⭐</p>
+        <p><b>Minh Tuấn:</b> Rất chuyên nghiệp và tận tâm. ⭐⭐⭐⭐☆</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bác sĩ 8 -->
+<div id="bs8" class="modal-doc">
+  <div class="content">
+    <a href="#" class="close">&times;</a>
+    <div class="popup-header">
+      <img src="https://doctor4u.vn/wp-content/uploads/2021/06/BSChung-250x250.jpg">
+      <div>
+        <h3>BS. Chung</h3>
+        <p>Chuyên khoa Nhi</p>
+        <div class="stars">★★★★★ <span>4.9/5 (130 đánh giá)</span></div>
+      </div>
+    </div>
+    <div class="popup-body">
+      <h4>🗓 Hẹn khám</h4>
+      <form class="appoint-form" onsubmit="handleAppointment(event, 'bs8')">
+        <input type="text" id="apptName8" placeholder="Họ và tên*" required>
+        <input type="date" id="apptDate8" required>
+        <input type="time" id="apptTime8" required>
+        <textarea id="apptReason8" rows="2" placeholder="Lý do khám..." required></textarea>
+        <button type="submit" class="btn btn-primary">Đặt lịch</button>
+      </form>
+      <h4>💬 Đánh giá bệnh nhân</h4>
+      <div class="reviews">
+        <p><b>Lan Phương:</b> Bác sĩ rất nhẹ nhàng với trẻ em, con tôi không sợ. ⭐⭐⭐⭐⭐</p>
+        <p><b>Minh Hà:</b> Tư vấn rất chi tiết về cách chăm sóc trẻ. ⭐⭐⭐⭐⭐</p>
+        <p><b>Thảo Vy:</b> Bác sĩ tận tâm, con tôi khỏi bệnh nhanh. ⭐⭐⭐⭐⭐</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bác sĩ 9 -->
+<div id="bs9" class="modal-doc">
+  <div class="content">
+    <a href="#" class="close">&times;</a>
+    <div class="popup-header">
+      <img src="https://doctor4u.vn/wp-content/uploads/2021/06/BSDao-250x250.jpg">
+      <div>
+        <h3>BS. Đào</h3>
+        <p>Chuyên khoa Sản phụ khoa</p>
+        <div class="stars">★★★★★ <span>5.0/5 (145 đánh giá)</span></div>
+      </div>
+    </div>
+    <div class="popup-body">
+      <h4>🗓 Hẹn khám</h4>
+      <form class="appoint-form" onsubmit="handleAppointment(event, 'bs9')">
+        <input type="text" id="apptName9" placeholder="Họ và tên*" required>
+        <input type="date" id="apptDate9" required>
+        <input type="time" id="apptTime9" required>
+        <textarea id="apptReason9" rows="2" placeholder="Lý do khám..." required></textarea>
+        <button type="submit" class="btn btn-primary">Đặt lịch</button>
+      </form>
+      <h4>💬 Đánh giá bệnh nhân</h4>
+      <div class="reviews">
+        <p><b>Hương Lan:</b> Bác sĩ rất tận tâm, tư vấn kỹ lưỡng. ⭐⭐⭐⭐⭐</p>
+        <p><b>Mai Anh:</b> Dịch vụ chuyên nghiệp, rất hài lòng. ⭐⭐⭐⭐⭐</p>
+        <p><b>Thu Hà:</b> Bác sĩ nhẹ nhàng, tạo cảm giác an tâm. ⭐⭐⭐⭐⭐</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bác sĩ 10 -->
+<div id="bs10" class="modal-doc">
+  <div class="content">
+    <a href="#" class="close">&times;</a>
+    <div class="popup-header">
+      <img src="https://doctor4u.vn/wp-content/uploads/2021/06/BS-Trang-2-270x250.jpg">
+      <div>
+        <h3>BS. Trang</h3>
+        <p>Chuyên khoa Mắt</p>
+        <div class="stars">★★★★☆ <span>4.7/5 (98 đánh giá)</span></div>
+      </div>
+    </div>
+    <div class="popup-body">
+      <h4>🗓 Hẹn khám</h4>
+      <form class="appoint-form" onsubmit="handleAppointment(event, 'bs10')">
+        <input type="text" id="apptName10" placeholder="Họ và tên*" required>
+        <input type="date" id="apptDate10" required>
+        <input type="time" id="apptTime10" required>
+        <textarea id="apptReason10" rows="2" placeholder="Lý do khám..." required></textarea>
+        <button type="submit" class="btn btn-primary">Đặt lịch</button>
+      </form>
+      <h4>💬 Đánh giá bệnh nhân</h4>
+      <div class="reviews">
+        <p><b>Văn Long:</b> Bác sĩ khám mắt rất kỹ, giải thích rõ ràng. ⭐⭐⭐⭐⭐</p>
+        <p><b>Hồng Nga:</b> Tư vấn về cách bảo vệ mắt rất hữu ích. ⭐⭐⭐⭐☆</p>
+        <p><b>Minh Đức:</b> Rất hài lòng với dịch vụ khám mắt. ⭐⭐⭐⭐⭐</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TƯ VẤN -->
+<section id="consult" class="section">
+  <div class="container">
+    <h2 class="section-title">💬 Tư vấn trực tuyến</h2>
+    <div class="consult-grid">
+      <div class="consult-item">
+        <h4>📹 Video Call với bác sĩ</h4>
+        <p>Kết nối ngay để được tư vấn trực tiếp qua video.</p>
+        <button class="btn btn-primary" id="startVideoCallBtn">Bắt đầu cuộc gọi</button>
+      </div>
+      <div class="consult-item">
+        <h4>📄 Tải hồ sơ bệnh</h4>
+        <input type="file" id="fileInput" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
+        <button class="btn btn-primary" style="margin-top:10px;" id="uploadFileBtn">Gửi hồ sơ</button>
+        <p id="fileStatus" style="margin-top: 10px; font-size: 14px; color: #666;"></p>
+      </div>
+    </div>
+    <div class="history">
+      <h4>🕑 Lịch sử trò chuyện</h4>
+      <ul>
+        <li><b>Bệnh nhân:</b> Tôi bị ho kéo dài hơn 2 tuần.</li>
+        <li><b>Bác sĩ:</b> Bạn có bị sốt hay khó thở không?</li>
+        <li><b>Bệnh nhân:</b> Không, chỉ khô họng và ho.</li>
+      </ul>
+      <textarea id="historyInput" rows="2" placeholder="Nhập tin nhắn mới..."></textarea>
+      <button class="btn btn-primary" id="sendHistoryBtn">Gửi</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p><strong>MEDIALO</strong> © 2025 | Kết nối sức khỏe – Chăm sóc tận tâm</p>
+  <p style="font-size: 0.85rem; opacity: 0.9;">Vietnamese Technology</p>
+</footer>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script type="text/javascript">
+  (function(){
+    emailjs.init({
+      publicKey: "WMR-hVI4x19gyn3uT"
+    });
+  })();
+</script>
+
+<script>
+  // ==================== DỮ LIỆU CƠ BẢN ====================
+  const doctorsData = [
+    { name: 'ThS.BSCKI Nguyễn Văn Khương', specialty: 'Bác sĩ gia đình', id: 'bs1' },
+    { name: 'TS. BS Nguyễn Minh Hùng', specialty: 'Tim mạch', id: 'bs2' },
+    { name: 'TS.BS Nguyễn Thị Thu Hương', specialty: 'Thận – Tiết niệu', id: 'bs3' },
+    { name: 'BS. Lê Thị Anh', specialty: 'Da liễu', id: 'bs4' },
+    { name: 'BSCKII Nguyễn Văn Bình', specialty: 'Nội tiết', id: 'bs5' },
+    { name: 'BS. Đức', specialty: 'Chuyên khoa Nội', id: 'bs6' },
+    { name: 'BS. Nam', specialty: 'Chuyên khoa Ngoại', id: 'bs7' },
+    { name: 'BS. Chung', specialty: 'Chuyên khoa Nhi', id: 'bs8' },
+    { name: 'BS. Đào', specialty: 'Chuyên khoa Sản phụ khoa', id: 'bs9' },
+    { name: 'BS. Trang', specialty: 'Chuyên khoa Mắt', id: 'bs10' }
+  ];
+  
+  // ==================== HÀM CHUNG ====================
+  // Bỏ dấu tiếng Việt
+  function removeVietnameseTones(str) {
+    return str.toLowerCase()
+      .replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, 'a')
+      .replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, 'e')
+      .replace(/ì|í|ị|ỉ|ĩ/g, 'i')
+      .replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, 'o')
+      .replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, 'u')
+      .replace(/ỳ|ý|ỵ|ỷ|ỹ/g, 'y')
+      .replace(/đ/g, 'd');
+  }
+  
+  // ==================== TÌM KIẾM BÁC SĨ ====================
+  (function setupDoctorSearch() {
+    const searchBtn = document.getElementById('searchBtn');
+    const searchInput = document.getElementById('searchInput');
+    const resultsDiv = document.getElementById('searchResults');
+    if (!searchBtn || !searchInput || !resultsDiv) return;
+  
+    function searchDoctors(term) {
+      term = term.toLowerCase().trim();
+      const termNoTone = removeVietnameseTones(term);
+  
+      return doctorsData.filter(doc => {
+        const name = doc.name.toLowerCase();
+        const spec = doc.specialty.toLowerCase();
+        const nameNoTone = removeVietnameseTones(name);
+        const specNoTone = removeVietnameseTones(spec);
+  
+        return (
+          name.includes(term) ||
+          spec.includes(term) ||
+          nameNoTone.includes(termNoTone) ||
+          specNoTone.includes(termNoTone)
+        );
+      });
+    }
+  
+    function renderResults(filtered, term) {
+      if (!term.trim()) {
+        resultsDiv.style.display = 'none';
+        return;
+      }
+      if (filtered.length === 0) {
+        resultsDiv.innerHTML = `
+          <p style="color:#666;text-align:center;padding:20px;background:#fff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+            ❌ Không tìm thấy bác sĩ nào phù hợp với từ khóa "${term}"
+          </p>`;
+        resultsDiv.style.display = 'block';
+        return;
+      }
+  
+      resultsDiv.innerHTML = `
+        <h4 style="margin-bottom:15px;color:#007bff;">🔍 Kết quả tìm kiếm: ${filtered.length} bác sĩ</h4>
+        ${filtered.map(doc => `
+          <div style="background:#fff;padding:20px;margin:15px 0;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.1);border:2px solid #f0f7ff;">
+            <strong style="color:#333;font-size:1.1rem;">${doc.name}</strong><br>
+            <span style="color:#666;display:block;margin:8px 0;">${doc.specialty}</span>
+            <a href="#${doc.id}" class="btn btn-primary" style="margin-top:12px;padding:10px 25px;border-radius:25px;">Xem chi tiết</a>
+          </div>
+        `).join('')}
+      `;
+      resultsDiv.style.display = 'block';
+    }
+  
+    searchBtn.addEventListener('click', () => {
+      const term = searchInput.value;
+      renderResults(searchDoctors(term), term);
+    });
+  
+    searchInput.addEventListener('keypress', e => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        searchBtn.click();
+      }
+    });
+  })();
+  
+  // ==================== CHAT HỖ TRỢ ====================
+  (function setupChat() {
+    const sendBtn = document.getElementById('sendChatBtn');
+    const input = document.getElementById('chatInput');
+    const messagesDiv = document.getElementById('chatMessages');
+    if (!sendBtn || !input || !messagesDiv) return;
+  
+    const responses = [
+      'Xin chào! Tôi là trợ lý MEDIALO 👩‍⚕️ — bạn cần hỗ trợ gì hôm nay?',
+      'Bạn có thể tìm kiếm bác sĩ theo chuyên khoa, đặt lịch khám, hoặc tư vấn trực tuyến.',
+      'Để đặt lịch khám, vui lòng chọn bác sĩ và điền thông tin trong form đặt lịch.',
+      'Bạn có thể gọi video với bác sĩ bằng cách nhấn nút "Bắt đầu cuộc gọi" ở phần Tư vấn.'
+    ];
+    let index = 0;
+  
+    function sendMessage() {
+      const msg = input.value.trim();
+      if (!msg) return;
+      messagesDiv.innerHTML += `
+        <p style="text-align:right;color:#007bff;margin:8px 0;padding:8px 12px;background:#e3f2fd;border-radius:12px;display:inline-block;max-width:70%;margin-left:auto;">
+          <strong>Bạn:</strong> ${msg}
+        </p>`;
+      input.value = '';
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+  
+      setTimeout(() => {
+        const reply = responses[index % responses.length];
+        messagesDiv.innerHTML += `
+          <p style="color:#333;font-size:14px;margin:8px 0;padding:8px 12px;background:#f0f0f0;border-radius:12px;display:inline-block;max-width:70%;">
+            <strong>Trợ lý:</strong> ${reply}
+          </p>`;
+        index++;
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      }, 500);
+    }
+  
+    sendBtn.addEventListener('click', sendMessage);
+    input.addEventListener('keypress', e => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+  })();
+  
+// ==================== FORM ĐĂNG KÝ ====================
+  (function setupRegisterForm() {
+    const form = document.getElementById('registerForm');
+    if (!form) return;
+
+    //Public Key của bạn
+
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+
+      const name = form.regName.value.trim();
+      const phone = form.regPhone.value.trim();
+      const specialty = form.regSpecialty.value || "Không chọn";
+      const reason = form.regReason.value.trim();
+      const email = prompt("📧 Nhập email của bạn để nhận xác nhận:"); // (hoặc thêm input email vào form)
+
+      if (!name || !phone || !reason || !email) {
+        alert('⚠️ Vui lòng điền đầy đủ thông tin!');
+        return;
+      }
+
+      try {
+        // ✅ Gửi email qua EmailJS
+        await emailjs.send("service_qfljpo8", "template_qafaemu", {
+          user_name: name,
+          user_phone: phone,
+          user_specialty: specialty,
+          user_reason: reason,
+          to_email: email
+        });
+
+        alert("✅ Đăng ký thành công! Một email xác nhận đã được gửi tới " + email);
+      } catch (err) {
+        console.error("EmailJS Error:", err);
+        alert("⚠️ Đăng ký thành công, nhưng không gửi được email.");
+      }
+
+      // ✅ Lưu cục bộ
+      const registration = { name, phone, specialty, reason, date: new Date().toLocaleString('vi-VN') };
+      const list = JSON.parse(localStorage.getItem('registrations') || '[]');
+      list.push(registration);
+      localStorage.setItem('registrations', JSON.stringify(list));
+
+      document.getElementById('openModal').checked = false;
+      form.reset();
+    });
+  })();
+
+  // ==================== ĐẶT LỊCH KHÁM ====================
+  function handleAppointment(e, doctorId) {
+    e.preventDefault();
+    const form = e.target;
+    const name = form.querySelector('input[type="text"]').value;
+    const date = form.querySelector('input[type="date"]').value;
+    const time = form.querySelector('input[type="time"]').value;
+    const reason = form.querySelector('textarea').value;
+  
+    const appointment = { doctorId, name, date, time, reason, createdAt: new Date().toLocaleString('vi-VN') };
+    const list = JSON.parse(localStorage.getItem('appointments') || '[]');
+    list.push(appointment);
+    localStorage.setItem('appointments', JSON.stringify(list));
+  
+    alert(`Đặt lịch thành công!\nBác sĩ: ${getDoctorName(doctorId)}\nNgày: ${date}\nGiờ: ${time}`);
+    window.location.hash = '';
+    form.reset();
+  }
+  
+  function getDoctorName(id) {
+    const doctor = doctorsData.find(d => d.id === id);
+    return doctor ? doctor.name : 'Bác sĩ';
+  }
+  
+  // ==================== VIDEO CALL ====================
+  (function setupVideoCall() {
+    const btn = document.getElementById('startVideoCallBtn');
+    if (btn) btn.addEventListener('click', () => (window.location.href = 'call.html'));
+  })();
+  
+  // ==================== UPLOAD FILE ====================
+  (function setupFileUpload() {
+    const btn = document.getElementById('uploadFileBtn');
+    const fileInput = document.getElementById('fileInput');
+    const statusDiv = document.getElementById('fileStatus');
+    if (!btn || !fileInput || !statusDiv) return;
+  
+    btn.addEventListener('click', () => {
+      if (!fileInput.files.length) {
+        statusDiv.textContent = 'Vui lòng chọn file!';
+        statusDiv.style.color = '#dc3545';
+        return;
+      }
+  
+      const file = fileInput.files[0];
+      if (file.size > 10 * 1024 * 1024) {
+        statusDiv.textContent = 'File quá lớn! Vui lòng chọn file nhỏ hơn 10MB.';
+        statusDiv.style.color = '#dc3545';
+        return;
+      }
+  
+      statusDiv.textContent = 'Đang tải lên...';
+      statusDiv.style.color = '#007bff';
+      setTimeout(() => {
+        statusDiv.textContent = `✅ Đã tải lên thành công: ${file.name} (${(file.size / 1024).toFixed(2)} KB)`;
+        statusDiv.style.color = '#28a745';
+        fileInput.value = '';
+      }, 1500);
+    });
+  })();
+  
+  // ==================== LỊCH SỬ TRÒ CHUYỆN ====================
+  (function setupHistory() {
+    const sendBtn = document.getElementById('sendHistoryBtn');
+    const input = document.getElementById('historyInput');
+    const historyUl = document.querySelector('.history ul');
+    if (!sendBtn || !input || !historyUl) return;
+  
+    sendBtn.addEventListener('click', () => {
+      const msg = input.value.trim();
+      if (!msg) return;
+      const li = document.createElement('li');
+      li.innerHTML = `<b>Bệnh nhân:</b> ${msg}`;
+      historyUl.appendChild(li);
+  
+      setTimeout(() => {
+        const res = document.createElement('li');
+        res.innerHTML = `<b>Bác sĩ:</b> Cảm ơn bạn đã cung cấp thông tin. Chúng tôi sẽ phản hồi sớm nhất.`;
+        historyUl.appendChild(res);
+      }, 1000);
+      input.value = '';
+    });
+  
+    input.addEventListener('keypress', e => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendBtn.click();
+      }
+    });
+  })();
+  
+  // ==================== VIẾT ĐÁNH GIÁ ====================
+  (function setupReview() {
+    const btn = document.getElementById('writeReviewBtn');
+    if (!btn) return;
+    btn.addEventListener('click', () => {
+      const doctorName = prompt('Nhập tên bác sĩ bạn muốn đánh giá:');
+      if (!doctorName) return;
+      const rating = prompt('Nhập số sao (1-5):');
+      if (!rating || rating < 1 || rating > 5) {
+        alert('Vui lòng nhập số sao từ 1 đến 5!');
+        return;
+      }
+      const comment = prompt('Nhập đánh giá của bạn:');
+      if (!comment) return;
+      alert('Cảm ơn bạn đã đánh giá! Đánh giá của bạn đã được ghi nhận.');
+    });
+  })();
+  
+  // ==================== ĐÓNG POPUP KHI CLICK NGOÀI ====================
+  document.querySelectorAll('.modal-doc').forEach(modal => {
+    modal.addEventListener('click', e => {
+      if (e.target === modal) window.location.hash = '';
+    });
+  });
+  
+  // ==================== NGÀY HẸN KHÁM KHÔNG NHỎ HƠN HÔM NAY ====================
+  document.querySelectorAll('input[type="date"]').forEach(input => {
+    input.min = new Date().toISOString().split('T')[0];
+  });
+  </script>
+
+</body>
+</html>

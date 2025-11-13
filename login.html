@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DoctorConnect - Đăng nhập khách hàng</title>
+  <link rel="icon" href="./assets/lg.png" type="image/png">
+  <link rel="shortcut icon" href="./assets/lg.png" type="image/png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    /* ===== RESET CƠ BẢN ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #d6e4ff, #a8c0ff);
+    }
+
+    /* ===== KHUNG CHÍNH ===== */
+    .login-container {
+      display: flex;
+      flex-wrap: wrap;
+      background: none;
+      gap: 2rem;
+      justify-content: center;
+    }
+
+    /* ===== FORM LOGIN ===== */
+    .login-box {
+      background-color: #fff;
+      border-radius: 12px;
+      padding: 40px 35px;
+      width: 360px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .login-box img {
+      display: block;
+      margin: 0 auto 10px;
+      width: 180px;
+    }
+
+    .login-box h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      font-size: 1.1rem;
+      color: #111;
+    }
+
+    .input-group {
+      position: relative;
+      margin-bottom: 15px;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 12px 40px 12px 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 0.95rem;
+    }
+
+    .input-group i {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #888;
+    }
+
+    .btn-login {
+      width: 100%;
+      padding: 12px;
+      background-color: #006aff;
+      border: none;
+      border-radius: 6px;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .btn-login:hover {
+      background-color: #004dcf;
+    }
+
+    .forgot {
+      text-align: center;
+      display: block;
+      margin: 12px 0 18px;
+      font-size: 0.9rem;
+      color: #006aff;
+      text-decoration: none;
+    }
+
+    .forgot:hover {
+      text-decoration: underline;
+    }
+
+    .note {
+      font-size: 0.85rem;
+      color: #555;
+      background: #f3f4f6;
+      padding: 10px;
+      border-radius: 6px;
+      line-height: 1.4;
+    }
+
+    .footer-text {
+      margin-top: 20px;
+      font-size: 0.8rem;
+      color: #555;
+      text-align: center;
+    }
+    .login-link{
+        text-align: center;
+        display: block;
+        margin: 12px 0 18px;
+        font-size: 0.9rem;
+        color: #006aff;
+        text-decoration: none;
+    }
+
+    /* ===== ẢNH QUẢNG CÁO BÊN PHẢI ===== */
+    .ad-box {
+      background-color: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      width: 340px;
+      height: 550px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .ad-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 800px) {
+      .login-container {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-container">
+    <!-- FORM LOGIN -->
+    <div class="login-box">
+      <a href="./index.html">
+        <img src="./assets/lg.png" alt="logo">
+      </a>
+      <h2>Đăng nhập khách hàng an toàn</h2>
+
+      <form>
+        <div class="input-group">
+          <input type="text" placeholder="Tên người dùng" required>
+          <i class="fa-regular fa-user"></i>
+        </div>
+
+        <div class="input-group">
+          <input type="password" placeholder="Mật khẩu" required>
+          <i class="fa-solid fa-lock"></i>
+        </div>
+
+        <button type="submit" class="btn-login">Đăng nhập</button>
+      </form>
+
+      <a href="#" class="forgot">Quên mật khẩu?</a>
+      <a href="./signup.html" class="login-link">Chưa có tài khoản? Đăng ký</a>
+
+      <p class="note">
+        Khi đăng nhập, bạn đồng ý tuân thủ mọi luật và quy định về quyền riêng tư hiện hành.
+      </p>
+
+      <div class="footer-text">
+        <p>Bản quyền © 2025 Medialo™</p>
+        <p>Gọi cho chúng tôi theo số 972-503-0717</p>
+      </div>
+    </div>
+
+    <!-- HÌNH ẢNH QUẢNG CÁO -->
+    <div class="ad-box">
+      <img src="./assets/card.png" alt="ADS" >
+    </div>
+  </div>
+<script>
+  // Link webapp của bạn (đã deploy)
+  const webAppURL = 'https://script.google.com/macros/s/AKfycbz45BOqfDA1Xk3L3sGV_Y3yk125o-k5PZHlCOkj2NIB6ubIn_DfF-agnNrncCh1PPkutA/exec'; // ví dụ: https://script.google.com/macros/s/AKfycb.../exec
+
+  // Sự kiện đăng nhập
+  document.querySelector('form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const username = e.target.querySelector('input[type="text"]').value.trim();
+    const password = e.target.querySelector('input[type="password"]').value.trim();
+
+    if (!username || !password) {
+      alert('⚠️ Vui lòng nhập đầy đủ thông tin!');
+      return;
+    }
+
+    try {
+      // Gọi webapp với phương thức GET, gửi username và password
+      const params = new URLSearchParams({ username, password });
+      const response = await fetch(`${webAppURL}?username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`);
+      const data = await response.json();
+
+      if (data.status === 'success') {
+        alert(`🎉 Chào mừng ${data.name || username}!`);
+        window.location.href = './home.html'; // Chuyển trang sau khi đăng nhập
+      } else if (data.status === 'exists') {
+        alert('❌ Sai tên đăng nhập hoặc mật khẩu!');
+      } else if (data.status === 'error') {
+        alert('❌ ' + (data.message || 'Có lỗi xảy ra!'));
+      } else {
+        alert('❌ Lỗi không xác định!');
+      }
+
+    } catch (err) {
+      console.error('❌ Lỗi khi đăng nhập:', err);
+      alert('❌ Không thể kết nối server. Vui lòng thử lại.');
+    }
+  });
+</script>
+
+
+</body>
+</html>
